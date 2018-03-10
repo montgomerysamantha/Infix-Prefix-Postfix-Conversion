@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(uxUserInterface));
             this.uxInitExpLabel = new System.Windows.Forms.Label();
             this.uxInitTypeLabel = new System.Windows.Forms.Label();
             this.uxResultTypeLabel = new System.Windows.Forms.Label();
@@ -91,6 +92,7 @@
             // 
             // uxInitialTypeComboBox
             // 
+            this.uxInitialTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.uxInitialTypeComboBox.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uxInitialTypeComboBox.FormattingEnabled = true;
             this.uxInitialTypeComboBox.Location = new System.Drawing.Point(116, 43);
@@ -100,6 +102,7 @@
             // 
             // uxResultTypeComboBox
             // 
+            this.uxResultTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.uxResultTypeComboBox.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uxResultTypeComboBox.FormattingEnabled = true;
             this.uxResultTypeComboBox.Location = new System.Drawing.Point(116, 84);
@@ -164,6 +167,8 @@
             this.Controls.Add(this.uxResultTypeLabel);
             this.Controls.Add(this.uxInitTypeLabel);
             this.Controls.Add(this.uxInitExpLabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "uxUserInterface";
             this.Text = "Expression Tree Builder";
             this.ResumeLayout(false);
