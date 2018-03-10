@@ -91,33 +91,37 @@ namespace Project4
             }
             else if (uxInitialTypeComboBox.Text == "Prefix" && uxResultTypeComboBox.Text == "Postfix")
             {
-                Stack<string> s = new Stack<string>();
-                char[] delims = { ' ' };
-                string[] pieces = (uxInitialExpressionTextBox.Text).Split(delims, StringSplitOptions.RemoveEmptyEntries);
-
-                for (int i = pieces.Length - 1; i >= 0; i--)
-                {
-                    //if current piece is a number, push it on the stack
-                    if (Regex.IsMatch(pieces[i], @"^\d+$"))
-                    {
-                        s.Push(pieces[i].ToString() + " ");
-                    }
-                    //if the current piece is an operator
-                    else if (Regex.IsMatch(pieces[i].ToString(), "[+-/*]"))
-                    {
-                        //pop the stack twice
-                        String val1 = s.Pop();
-                        String val2 = s.Pop();
-                        StringBuilder sb = new StringBuilder();
-                        sb.Append(val1 + " " + val2 + " " + pieces[i] + " ");
-                        s.Push(sb.ToString());
-                    }
-                }
-                uxResultTextBox.Text = s.Pop();
+                string result = PretoPost();
+                uxResultTextBox.Text = result;
             }
         }
 
-        //private string 
+        private string PretoPost() //method for going from Prefix to Postfix
+        {
+            Stack<string> s = new Stack<string>();
+            char[] delims = { ' ' };
+            string[] pieces = (uxInitialExpressionTextBox.Text).Split(delims, StringSplitOptions.RemoveEmptyEntries);
+
+            for (int i = pieces.Length - 1; i >= 0; i--)
+            {
+                //if current piece is a number, push it on the stack
+                if (Regex.IsMatch(pieces[i], @"^\d+$"))
+                {
+                    s.Push(pieces[i].ToString() + " ");
+                }
+                //if the current piece is an operator
+                else if (Regex.IsMatch(pieces[i].ToString(), "[+-/*]"))
+                {
+                    //pop the stack twice
+                    String val1 = s.Pop();
+                    String val2 = s.Pop();
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(val1 + " " + val2 + " " + pieces[i] + " ");
+                    s.Push(sb.ToString());
+                }
+            }
+            return s.Pop();
+        }
         private int OpPreced(char c)
         {
             if ('+' == c || '-' == c)
