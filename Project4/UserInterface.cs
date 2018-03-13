@@ -39,9 +39,24 @@ namespace Project4
              */
             string expression = uxInitialExpressionTextBox.Text;
 
+            //check if expression is empty or if there's any symbols, letters, or stuff
+            if (expression == "" || RemoveSpaces(expression) == " ")
+            {
+                MessageBox.Show("Error: Please enter something for the initial expression!");
+                uxInitialExpressionTextBox.Text = ""; //clear out textbox
+                return;
+            }
+            else if (!IsProperFormat(expression))
+            {
+                MessageBox.Show("Error: Please remove letters and unsupported symbols from the initial expression!");
+                uxInitialExpressionTextBox.Text = ""; //clear out textbox
+                return;
+            }
+
+
             //reformat with some spaces between operators
             StringBuilder sb = new StringBuilder(expression);
-            foreach (char c in @"+=*/()")
+            foreach (char c in @"+-*/()")
                 sb.Replace(c.ToString(), " " + c + " ");
             expression = sb.ToString();
             //now it's good
@@ -54,68 +69,79 @@ namespace Project4
             switch (InitialType)
             {
                 case "Infix":
-                    switch (ResultType)
                     {
-                        case "Infix":
-                            //update result box to expression
-                            uxResultTextBox.Text = expression;
-                            break;
-                        case "Prefix":
-                            string posty = InfixtoPost(expression); //convert to postfix
-                            //convert to exp. tree
-                            ExpressionTree<string> t = TreeConversion(posty);
-                            t.DrawTree();
-                            //now do a preorder transversal
-                            uxResultTextBox.Text = t.Preorder(t);
-                            break;
-                        case "Postfix":
-                            uxResultTextBox.Text = InfixtoPost(expression);
-                            break;
-                        default:
-                            MessageBox.Show("Error: Invalid Option");
-                            break;
+                        switch (ResultType)
+                        {
+                            case "Infix":
+                                //update result box to expression
+                                uxResultTextBox.Text = RemoveSpaces(expression);
+                                break;
+                            case "Prefix":
+                                string postfix = InfixtoPost(expression); //convert to postfix                                            
+                                ExpressionTree<string> t = TreeConversion(postfix); //convert to exp. tree
+                                //do a preorder transversal
+                                uxResultTextBox.Text = RemoveSpaces(t.Preorder(t));
+                                break;
+                            case "Postfix":
+                                //convert to postfix, using function
+                                //also remove any extra spaces and replace them with " "
+                                uxResultTextBox.Text = RemoveSpaces(InfixtoPost(expression));
+                                break;
+                            default:
+                                MessageBox.Show("Error: Invalid Option");
+                                break;
+                        }
+                        break;
                     }
-                    break;
                 case "Prefix":
-                    switch (ResultType)
                     {
-                        case "Infix":
-                            string postfix = PretoPost(expression);
-                            //convert to exp. tree
-                            ExpressionTree<string> t = TreeConversion(postfix);
-                            t.DrawTree();
-                            //now do inorder transversal
-                            uxResultTextBox.Text = t.Inorder(t);
-                            break;
-                        case "Prefix":
-                            //update result box to expression
-                            uxResultTextBox.Text = expression;
-                            break;
-                        case "Postfix":
-                            //convert from prefix to postfix
-                            uxResultTextBox.Text = PretoPost(expression); 
-                            break;
-                        default:
-                            MessageBox.Show("Error: Invalid Option");
-                            break;
+                        string postfix = PretoPost(expression);  //convert to postfix
+                        ExpressionTree<string> t = TreeConversion(postfix); //convert to exp. tree
+
+                        switch (ResultType)
+                        {
+                            case "Infix":
+                                //now do inorder transversal
+                                uxResultTextBox.Text = RemoveSpaces(t.Inorder(t));
+                                break;
+                            case "Prefix":
+                                //update result box to expression
+                                uxResultTextBox.Text = RemoveSpaces(expression);
+                                break;
+                            case "Postfix":
+                                //convert from prefix to postfix
+                                uxResultTextBox.Text = RemoveSpaces(postfix);
+                                break;
+                            default:
+                                MessageBox.Show("Error: Invalid Option");
+                                break;
+                        }
+                        break;
                     }
-                    break;
                 case "Postfix":
-                    switch (ResultType)
                     {
-                        case "Infix":
-                            break;
-                        case "Prefix":
-                            break;
-                        case "Postfix":
-                            //update result box to expression
-                            uxResultTextBox.Text = expression;
-                            break;
-                        default:
-                            MessageBox.Show("Error: Invalid Option");
-                            break;
+                        string postfix = expression; //should already be in postfix
+                        ExpressionTree<string> t = TreeConversion(postfix); //convert to exp. tree
+                        switch (ResultType)
+                        {
+                            case "Infix":
+                                //now do inorder transversal
+                                uxResultTextBox.Text = RemoveSpaces(t.Inorder(t));
+                                break;
+                            case "Prefix":
+                                //do a preorder transversal
+                                uxResultTextBox.Text = RemoveSpaces(t.Preorder(t));
+                                break;
+                            case "Postfix":
+                                //update result box to expression
+                                uxResultTextBox.Text = RemoveSpaces(expression);
+                                break;
+                            default:
+                                MessageBox.Show("Error: Invalid Option");
+                                break;
+                        }
+                        break;
                     }
-                    break;
                 default:
                     MessageBox.Show("Error: Invalid Choice");
                     break;
@@ -251,9 +277,66 @@ namespace Project4
             return 0; //not called on an operator
         }
 
+        private bool IsProperFormat(string expression)
+        {
+            foreach (char c in expression)
+            {
+                if (Regex.IsMatch(c.ToString(), @"^\d+$") || Regex.IsMatch(c.ToString(), "[+-/*]") || c == ' ') //if it's a number / operator / space it's allowed
+                {
+                    continue;
+                }
+                else //other things return false
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private string RemoveSpaces(string s)
+        {
+            return Regex.Replace(s, @"\s+", " ");
+        }
+
         private void BuildTreeClick(object sender, EventArgs e)
         {
+            string expression = uxInitialExpressionTextBox.Text;
 
+            //reformat with some spaces between operators
+            StringBuilder sb = new StringBuilder(expression);
+            foreach (char c in @"+=*/()")
+                sb.Replace(c.ToString(), " " + c + " ");
+            expression = sb.ToString();
+            //now it's good
+
+            string InitialType = uxInitialTypeComboBox.Text;
+
+            switch(InitialType)
+            {
+                case "Infix":
+                    {
+                        string postfix = InfixtoPost(expression);
+                        ExpressionTree<string> tree = TreeConversion(postfix);
+                        tree.DrawTree();
+                        break;
+                    }
+                case "Prefix":
+                    {
+                        string postfix = PretoPost(expression);
+                        ExpressionTree<string> tree = TreeConversion(postfix);
+                        tree.DrawTree();
+                        break;
+                    }
+                case "Postfix":
+                    {
+                        ExpressionTree<string> tree = TreeConversion(expression);
+                        tree.DrawTree();
+                        break;
+                    }
+                default:
+                    MessageBox.Show("Error: Invalid choice.");
+                    break;
+            }
         }
 
         private void EvaluateClick(object sender, EventArgs e)

@@ -40,26 +40,25 @@ namespace Project4
             _height = -1;
         }
 
-        //TODO: fix parentheses for the transversals
         public virtual string Preorder(ExpressionTree<T> tree)
         {
             if (tree == NIL) return "";
             string order = tree.Key.ToString();
-            return order + Preorder(tree.Left) + Preorder(tree.Right);
+            return " " + order + " " + Preorder(tree.Left) + " " + Preorder(tree.Right) + " ";
         }
 
         public virtual string Postorder(ExpressionTree<T> tree)
         {
             if (tree == NIL) return "";
             string data = tree.Key.ToString();
-            return Postorder(tree.Left) + Postorder(tree.Left) + data;
+            return " " + Postorder(tree.Left) + " " + Postorder(tree.Left) + " " + data + " ";
         }
 
         public virtual string Inorder(ExpressionTree<T> tree)
         {
             if (tree == NIL) return "";
             string data = tree.Key.ToString();
-            return Inorder(tree.Left) + data + Inorder(tree.Right);
+            return "(" + Inorder(tree.Left) + " " + data + " " + Inorder(tree.Right) + ")";
         }
         object ITree.Root
         {
