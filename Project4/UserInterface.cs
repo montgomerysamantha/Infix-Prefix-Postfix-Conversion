@@ -61,7 +61,6 @@ namespace Project4
             expression = sb.ToString();
             //now it's good
 
-            MessageBox.Show(expression);
             string InitialType = uxInitialTypeComboBox.Text;
             string ResultType = uxResultTypeComboBox.Text;
 
@@ -301,6 +300,20 @@ namespace Project4
         private void BuildTreeClick(object sender, EventArgs e)
         {
             string expression = uxInitialExpressionTextBox.Text;
+
+            //check if expression is empty or if there's any symbols, letters, or stuff
+            if (expression == "" || RemoveSpaces(expression) == " ")
+            {
+                MessageBox.Show("Error: Please enter something for the initial expression!");
+                uxInitialExpressionTextBox.Text = ""; //clear out textbox
+                return;
+            }
+            else if (!IsProperFormat(expression))
+            {
+                MessageBox.Show("Error: Please remove letters and unsupported symbols from the initial expression!");
+                uxInitialExpressionTextBox.Text = ""; //clear out textbox
+                return;
+            }
 
             //reformat with some spaces between operators
             StringBuilder sb = new StringBuilder(expression);
