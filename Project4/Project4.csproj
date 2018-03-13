@@ -35,6 +35,9 @@
     <ApplicationIcon>tree-46-256.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="KansasStateUniversity.TreeViewer2">
+      <HintPath>.\KansasStateUniversity.TreeViewer2.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
