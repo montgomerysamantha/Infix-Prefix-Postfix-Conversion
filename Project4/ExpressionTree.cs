@@ -40,6 +40,7 @@ namespace Project4
             _height = -1;
         }
 
+        //TODO: fix parentheses for the transversals
         public virtual string Preorder(ExpressionTree<T> tree)
         {
             if (tree == NIL) return "";
