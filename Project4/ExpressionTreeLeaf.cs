@@ -29,5 +29,10 @@ namespace Project4
         {
             return _leafdata;
         }
+
+        public override int SolveTree()
+        {
+            return Convert.ToInt32(_leafdata);
+        }
     }
 }

@@ -94,13 +94,34 @@ namespace Project4
         }
 
         public ITree[] Children
-       {
+        {
             get
             {
                 ITree[] children = new ITree[2];
                 children[0] = _left;
                 children[1] = _right;
                 return children;
+            }
+        }
+
+        public virtual int SolveTree()
+        {
+            if (this == NIL) return 0;
+            if (this.Key.ToString() == "+") //add
+            {
+                return this._left.SolveTree() + this._right.SolveTree();
+            }
+            else if (this.Key.ToString() == "-") //subtract
+            {
+                return this._left.SolveTree() - this._right.SolveTree();
+            }
+            else if (this.Key.ToString() == "*") //multiply
+            {
+                return this._left.SolveTree() * this._right.SolveTree();
+            }
+            else //if (this.Key == "/") //divide
+            {
+                return this._left.SolveTree() / this._right.SolveTree();
             }
         }
 
