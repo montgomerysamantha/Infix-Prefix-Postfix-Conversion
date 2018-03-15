@@ -43,22 +43,19 @@ namespace Project4
             if (expression == "" || RemoveSpaces(expression) == " ")
             {
                 MessageBox.Show("Error: Please enter something for the initial expression!");
-                uxInitialExpressionTextBox.Text = ""; //clear out textbox
+                //uxInitialExpressionTextBox.Text = ""; //clear out textbox
                 return;
             }
             else if (!IsProperFormat(expression))
             {
                 MessageBox.Show("Error: Please remove letters and unsupported symbols from the initial expression!");
-                uxInitialExpressionTextBox.Text = ""; //clear out textbox
+                //uxInitialExpressionTextBox.Text = ""; //clear out textbox
                 return;
             }
 
 
             //reformat with some spaces between operators
-            StringBuilder sb = new StringBuilder(expression);
-            foreach (char c in @"+-*/()")
-                sb.Replace(c.ToString(), " " + c + " ");
-            expression = sb.ToString();
+            expression = AddOperatorSpaces(expression);
             //now it's good
 
             string InitialType = uxInitialTypeComboBox.Text;
@@ -372,10 +369,10 @@ namespace Project4
 
         private bool IsProperFormat(string expression)
         {
-            /*
             foreach (char c in expression)
             {
-                if (Regex.IsMatch(c.ToString(), @"^\d+$") || Regex.IsMatch(c.ToString(), "[+-/*]") || c == ' ') //if it's a number / operator / space it's allowed
+                //if it's a number / operator OR PARENTHESES / space it's allowed
+                if (Regex.IsMatch(c.ToString(), @"^\d+$") || Regex.IsMatch(c.ToString(), "[+-/*()]") || c == ' ') 
                 {
                     continue;
                 }
@@ -383,14 +380,24 @@ namespace Project4
                 {
                     return false;
                 }
-            }
-            */
+            } 
             return true;
         }
 
         private string RemoveSpaces(string s)
         {
             return Regex.Replace(s, @"\s+", " ");
+        }
+
+        private string AddOperatorSpaces(string exp)
+        {
+            //reformat with some spaces between operators
+            StringBuilder sb = new StringBuilder(exp);
+            foreach (char c in @"+=*/()")
+                sb.Replace(c.ToString(), " " + c + " ");
+            exp = sb.ToString();
+            //now it's good
+            return exp;
         }
 
         private void BuildTreeClick(object sender, EventArgs e)
@@ -401,21 +408,18 @@ namespace Project4
             if (expression == "" || RemoveSpaces(expression) == " ")
             {
                 MessageBox.Show("Error: Please enter something for the initial expression!");
-                uxInitialExpressionTextBox.Text = ""; //clear out textbox
+                //uxInitialExpressionTextBox.Text = ""; //clear out textbox
                 return;
             }
             else if (!IsProperFormat(expression))
             {
                 MessageBox.Show("Error: Please remove letters and unsupported symbols from the initial expression!");
-                uxInitialExpressionTextBox.Text = ""; //clear out textbox
+                //uxInitialExpressionTextBox.Text = ""; //clear out textbox
                 return;
             }
 
             //reformat with some spaces between operators
-            StringBuilder sb = new StringBuilder(expression);
-            foreach (char c in @"+=*/()")
-                sb.Replace(c.ToString(), " " + c + " ");
-            expression = sb.ToString();
+            expression = AddOperatorSpaces(expression);
             //now it's good
 
             string InitialType = uxInitialTypeComboBox.Text;
@@ -496,22 +500,19 @@ namespace Project4
             if (expression == "" || RemoveSpaces(expression) == " ")
             {
                 MessageBox.Show("Error: Please enter something for the initial expression!");
-                uxInitialExpressionTextBox.Text = ""; //clear out textbox
+                //uxInitialExpressionTextBox.Text = ""; //clear out textbox
                 return;
             }
             else if (!IsProperFormat(expression))
             {
                 MessageBox.Show("Error: Please remove letters and unsupported symbols from the initial expression!");
-                uxInitialExpressionTextBox.Text = ""; //clear out textbox
+                //uxInitialExpressionTextBox.Text = ""; //clear out textbox
                 return;
             }
 
 
             //reformat with some spaces between operators
-            StringBuilder sb = new StringBuilder(expression);
-            foreach (char c in @"+-*/()")
-                sb.Replace(c.ToString(), " " + c + " ");
-            expression = sb.ToString();
+            expression = AddOperatorSpaces(expression);
             //now it's good
 
             string InitialType = uxInitialTypeComboBox.Text;
