@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KansasStateUniversity.TreeViewer2;
+using System.Windows.Forms;
 
 namespace Project4
 {
@@ -43,22 +44,46 @@ namespace Project4
         public virtual string Preorder(ExpressionTree<T> tree)
         {
             if (tree == NIL) return "";
-            string order = tree.Key.ToString();
-            return " " + order + " " + Preorder(tree.Left) + " " + Preorder(tree.Right) + " ";
+            try
+            {
+                string order = tree.Key.ToString();
+                return " " + order + " " + Preorder(tree.Left) + " " + Preorder(tree.Right) + " ";
+            }
+            catch (NullReferenceException nre)
+            {
+                MessageBox.Show("Error: please reformat your initial expression.");
+                return "";
+            }
         }
 
         public virtual string Postorder(ExpressionTree<T> tree)
         {
             if (tree == NIL) return "";
-            string data = tree.Key.ToString();
-            return " " + Postorder(tree.Left) + " " + Postorder(tree.Left) + " " + data + " ";
+            try
+            {
+                string data = tree.Key.ToString();
+                return " " + Postorder(tree.Left) + " " + Postorder(tree.Left) + " " + data + " ";
+            }
+            catch (NullReferenceException nre)
+            {
+                MessageBox.Show("Error: please reformat your initial expression.");
+                return "";
+            }
         }
 
         public virtual string Inorder(ExpressionTree<T> tree)
         {
             if (tree == NIL) return "";
-            string data = tree.Key.ToString();
-            return "(" + Inorder(tree.Left) + " " + data + " " + Inorder(tree.Right) + ")";
+            try
+            {
+                string data = tree.Key.ToString();
+                return "(" + Inorder(tree.Left) + " " + data + " " + Inorder(tree.Right) + ")";
+            }
+            catch (NullReferenceException nre)
+            {
+                MessageBox.Show("Error: please reformat your initial expression.");
+                return "";
+            }
         }
         object ITree.Root
         {
@@ -230,7 +255,15 @@ namespace Project4
 
         public override string ToString()
         {
-            return _key.ToString();
+            try
+            {
+                return _key.ToString();
+            }
+            catch (NullReferenceException nre)
+            {
+                MessageBox.Show("Error: please reformat!");
+                return "";
+            }
         }
 
         public T Key

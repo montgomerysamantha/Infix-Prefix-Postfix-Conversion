@@ -72,20 +72,51 @@ namespace Project4
                         switch (ResultType)
                         {
                             case "Infix":
-                                //update result box to expression
-                                uxResultTextBox.Text = RemoveSpaces(expression);
-                                break;
+                                {
+                                    //update result box to expression
+                                    uxResultTextBox.Text = RemoveSpaces(expression);
+                                    break;
+                                }
                             case "Prefix":
-                                string postfix = InfixtoPost(expression); //convert to postfix                                            
-                                ExpressionTree<string> t = TreeConversion(postfix); //convert to exp. tree
-                                //do a preorder transversal
-                                uxResultTextBox.Text = RemoveSpaces(t.Preorder(t));
-                                break;
+                                {
+                                    string postfix = InfixtoPost(expression); //convert to postfix  
+                                    if (postfix != "")
+                                    {
+                                        ExpressionTree<string> t = TreeConversion(postfix); //convert to exp. tree
+                                                                                            //do a preorder transversal
+                                        if (t != new ExpressionTree<string>())
+                                        {
+                                            uxResultTextBox.Text = RemoveSpaces(t.Preorder(t));
+                                        }
+                                        else
+                                        {
+                                            MessageBox.Show("Error: tree conversion unable to be completed.");
+                                            return;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Error: Invalid infix expression.");
+                                        return;
+                                    }
+                                    break;
+                                }
                             case "Postfix":
-                                //convert to postfix, using function
-                                //also remove any extra spaces and replace them with " "
-                                uxResultTextBox.Text = RemoveSpaces(InfixtoPost(expression));
-                                break;
+                                {
+                                    //convert to postfix, using function
+                                    //also remove any extra spaces and replace them with " "
+                                    string postfix = InfixtoPost(expression);
+                                    if (postfix != "")
+                                    {
+                                        uxResultTextBox.Text = RemoveSpaces(InfixtoPost(expression));
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Error: Invalid infix expression.");
+                                        return;
+                                    }
+                                    break;
+                                }
                             default:
                                 MessageBox.Show("Error: Invalid Option");
                                 break;
@@ -95,25 +126,41 @@ namespace Project4
                 case "Prefix":
                     {
                         string postfix = PretoPost(expression);  //convert to postfix
-                        ExpressionTree<string> t = TreeConversion(postfix); //convert to exp. tree
-
-                        switch (ResultType)
+                        if (postfix != "")
                         {
-                            case "Infix":
-                                //now do inorder transversal
-                                uxResultTextBox.Text = RemoveSpaces(t.Inorder(t));
-                                break;
-                            case "Prefix":
-                                //update result box to expression
-                                uxResultTextBox.Text = RemoveSpaces(expression);
-                                break;
-                            case "Postfix":
-                                //convert from prefix to postfix
-                                uxResultTextBox.Text = RemoveSpaces(postfix);
-                                break;
-                            default:
-                                MessageBox.Show("Error: Invalid Option");
-                                break;
+                            ExpressionTree<string> t = TreeConversion(postfix); //convert to exp. tree
+
+                            if (t != new ExpressionTree<string>())
+                            {
+                                switch (ResultType)
+                                {
+                                    case "Infix":
+                                        //now do inorder transversal
+                                        uxResultTextBox.Text = RemoveSpaces(t.Inorder(t));
+                                        break;
+                                    case "Prefix":
+                                        //update result box to expression
+                                        uxResultTextBox.Text = RemoveSpaces(expression);
+                                        break;
+                                    case "Postfix":
+                                        //convert from prefix to postfix
+                                        uxResultTextBox.Text = RemoveSpaces(postfix);
+                                        break;
+                                    default:
+                                        MessageBox.Show("Error: Invalid Option");
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("Error: tree conversion unable to be completed.");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error: Invalid prefix format.");
+                            return;
                         }
                         break;
                     }
@@ -121,23 +168,31 @@ namespace Project4
                     {
                         string postfix = expression; //should already be in postfix
                         ExpressionTree<string> t = TreeConversion(postfix); //convert to exp. tree
-                        switch (ResultType)
+                        if (t != new ExpressionTree<string>())
                         {
-                            case "Infix":
-                                //now do inorder transversal
-                                uxResultTextBox.Text = RemoveSpaces(t.Inorder(t));
-                                break;
-                            case "Prefix":
-                                //do a preorder transversal
-                                uxResultTextBox.Text = RemoveSpaces(t.Preorder(t));
-                                break;
-                            case "Postfix":
-                                //update result box to expression
-                                uxResultTextBox.Text = RemoveSpaces(expression);
-                                break;
-                            default:
-                                MessageBox.Show("Error: Invalid Option");
-                                break;
+                            switch (ResultType)
+                            {
+                                case "Infix":
+                                    //now do inorder transversal
+                                    uxResultTextBox.Text = RemoveSpaces(t.Inorder(t));
+                                    break;
+                                case "Prefix":
+                                    //do a preorder transversal
+                                    uxResultTextBox.Text = RemoveSpaces(t.Preorder(t));
+                                    break;
+                                case "Postfix":
+                                    //update result box to expression
+                                    uxResultTextBox.Text = RemoveSpaces(expression);
+                                    break;
+                                default:
+                                    MessageBox.Show("Error: Invalid Option");
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error: tree conversion unable to be completed.");
+                            return;
                         }
                         break;
                     }
@@ -166,10 +221,17 @@ namespace Project4
                 else if (Regex.IsMatch(pieces[i].ToString(), "[+-/*]"))
                 {
                     //pop the stack twice
-                    ExpressionTree<string> tree1 = s.Pop();
-                    ExpressionTree<string> tree2 = s.Pop();
-                    ExpressionTree<string> newTree = new ExpressionTree<string>(pieces[i].ToString(), tree2, tree1);
-                    s.Push(newTree);
+                    if (s.Count() >= 2)
+                    {
+                        ExpressionTree<string> tree1 = s.Pop();
+                        ExpressionTree<string> tree2 = s.Pop();
+                        ExpressionTree<string> newTree = new ExpressionTree<string>(pieces[i].ToString(), tree2, tree1);
+                        s.Push(newTree);
+                    }
+                    else
+                    {
+                        return new ExpressionTree<string>();
+                    }
                 }
                 else
                 {
@@ -177,7 +239,11 @@ namespace Project4
                     //whitespace
                 }
             }
-            return s.Pop();
+            if (s.Count() != 0)
+            {
+                return s.Pop();
+            }
+            return new ExpressionTree<string>();
         }
 
         private string InfixtoPost(string init)
@@ -201,8 +267,15 @@ namespace Project4
 
                         while (stackop > cur) //while top stack is an operator whose precedence is greater than that of the current piece
                         {
-                            result.Append(" " + characters.Pop() + " "); //pop the top element from the stack onto result
-                            if (characters.Count == 0 || characters.Peek() == '(' || characters.Peek() == ')') break;
+                            if (characters.Count != 0)
+                            {
+                                result.Append(" " + characters.Pop() + " "); //pop the top element from the stack onto result
+                                if (characters.Count == 0 || characters.Peek() == '(' || characters.Peek() == ')') break;
+                            }
+                            else
+                            {
+                                return "";
+                            }
                         }
                     }
                     characters.Push(init[i]); //push current piece onto stack
@@ -216,9 +289,19 @@ namespace Project4
                     while (characters.Peek() != '(') // pop items from the stack onto result until the top of the stack is a (
                     {
                         //pop items from stack onto result 
-                        result.Append(" " + characters.Pop() + " ");
+                        if (characters.Count != 0)
+                            result.Append(" " + characters.Pop() + " ");
+                        else
+                        {
+                            return "";
+                        }
                     }
-                    characters.Pop(); //to get rid of '('
+                    if (characters.Count != 0)
+                        characters.Pop(); //to get rid of '('
+                    else
+                    {
+                        return "";
+                    }
                 }
                 else
                 {
@@ -254,14 +337,25 @@ namespace Project4
                 else if (Regex.IsMatch(pieces[i].ToString(), "[+-/*]"))
                 {
                     //pop the stack twice
-                    String val1 = s.Pop();
-                    String val2 = s.Pop();
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append(val1 + " " + val2 + " " + pieces[i] + " ");
-                    s.Push(sb.ToString());
+                    if (s.Count >= 2)
+                    {
+                        String val1 = s.Pop();
+                        String val2 = s.Pop();
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append(val1 + " " + val2 + " " + pieces[i] + " ");
+                        s.Push(sb.ToString());
+                    }
+                    else
+                    {
+                        return "";
+                    }
                 }
             }
-            return s.Pop();
+            if (s.Count != 0)
+            {
+                return s.Pop();
+            }
+            return "";
         }
         private int OpPreced(char c)
         {
@@ -329,21 +423,61 @@ namespace Project4
                 case "Infix":
                     {
                         string postfix = InfixtoPost(expression);
-                        ExpressionTree<string> tree = TreeConversion(postfix);
-                        tree.DrawTree();
+                        if (postfix != "")
+                        {
+                            ExpressionTree<string> tree = TreeConversion(postfix);
+                            if (tree != new ExpressionTree<string>())
+                            {
+                                tree.DrawTree();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Error: tree conversion unable to be completed.");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error: Invalid infix expression.");
+                            return;
+                        }
                         break;
                     }
                 case "Prefix":
                     {
                         string postfix = PretoPost(expression);
-                        ExpressionTree<string> tree = TreeConversion(postfix);
-                        tree.DrawTree();
+                        if (postfix != "")
+                        {
+                            ExpressionTree<string> tree = TreeConversion(postfix);
+                            if (tree != new ExpressionTree<string>())
+                            {
+                                tree.DrawTree();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Error: tree conversion unable to be completed.");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error: Invalid prefix format.");
+                            return;
+                        }
                         break;
                     }
                 case "Postfix":
                     {
                         ExpressionTree<string> tree = TreeConversion(expression);
-                        tree.DrawTree();
+                        if (tree != new ExpressionTree<string>())
+                        {
+                            tree.DrawTree();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error: tree conversion unable to be completed.");
+                            return;
+                        }
                         break;
                     }
                 default:
@@ -354,7 +488,84 @@ namespace Project4
 
         private void EvaluateClick(object sender, EventArgs e)
         {
+            string expression = uxInitialExpressionTextBox.Text;
 
+            //check if expression is empty or if there's any symbols, letters, or stuff
+            if (expression == "" || RemoveSpaces(expression) == " ")
+            {
+                MessageBox.Show("Error: Please enter something for the initial expression!");
+                uxInitialExpressionTextBox.Text = ""; //clear out textbox
+                return;
+            }
+            else if (!IsProperFormat(expression))
+            {
+                MessageBox.Show("Error: Please remove letters and unsupported symbols from the initial expression!");
+                uxInitialExpressionTextBox.Text = ""; //clear out textbox
+                return;
+            }
+
+
+            //reformat with some spaces between operators
+            StringBuilder sb = new StringBuilder(expression);
+            foreach (char c in @"+-*/()")
+                sb.Replace(c.ToString(), " " + c + " ");
+            expression = sb.ToString();
+            //now it's good
+
+            string InitialType = uxInitialTypeComboBox.Text;
+
+            string postfix;
+            ExpressionTree<string> tree = new ExpressionTree<string>();
+            switch (InitialType)
+            {
+                case "Infix":
+                    {
+                        postfix = InfixtoPost(expression);
+                        if (postfix != "")
+                        {
+                            tree = TreeConversion(postfix);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error: Invalid infix expression.");
+                            return;
+                        }
+                        break;
+                    }
+                case "Prefix":
+                    {
+                        postfix = PretoPost(expression);
+                        if (postfix != "")
+                        {
+                            tree = TreeConversion(postfix);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error: invalid prefix format.");
+                            return;
+                        }
+                        break;
+                    }
+                case "Postfix":
+                    {
+                        tree = TreeConversion(expression);
+                        break;
+                    }
+                default:
+                    MessageBox.Show("Error: please enter a valid choice!");
+                    break;
+            }
+
+            //now we have our expression tree
+            if (tree != new ExpressionTree<string>()) //if the tree is not empty
+            {
+
+            }
+            else
+            {
+                MessageBox.Show("Error: tree conversion unable to be completed.");
+                return;
+            }
         }
     }
 }
