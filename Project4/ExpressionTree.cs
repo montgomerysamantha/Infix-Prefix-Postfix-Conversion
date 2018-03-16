@@ -49,7 +49,7 @@ namespace Project4
                 string order = tree.Key.ToString();
                 return " " + order + " " + Preorder(tree.Left) + " " + Preorder(tree.Right) + " ";
             }
-            catch (NullReferenceException nre)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error: please reformat your initial expression.");
                 return "";
@@ -64,7 +64,7 @@ namespace Project4
                 string data = tree.Key.ToString();
                 return " " + Postorder(tree.Left) + " " + Postorder(tree.Left) + " " + data + " ";
             }
-            catch (NullReferenceException nre)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error: please reformat your initial expression.");
                 return "";
@@ -79,7 +79,7 @@ namespace Project4
                 string data = tree.Key.ToString();
                 return "(" + Inorder(tree.Left) + " " + data + " " + Inorder(tree.Right) + ")";
             }
-            catch (NullReferenceException nre)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error: please reformat your initial expression.");
                 return "";
@@ -106,22 +106,30 @@ namespace Project4
 
         public virtual int SolveTree()
         {
-            if (this == NIL) return 0;
-            if (this.Key.ToString() == "+") //add
+            try
             {
-                return this._left.SolveTree() + this._right.SolveTree();
+                if (this == NIL) return 0;
+                if (this.Key.ToString() == "+") //add
+                {
+                    return this._left.SolveTree() + this._right.SolveTree();
+                }
+                else if (this.Key.ToString() == "-") //subtract
+                {
+                    return this._left.SolveTree() - this._right.SolveTree();
+                }
+                else if (this.Key.ToString() == "*") //multiply
+                {
+                    return this._left.SolveTree() * this._right.SolveTree();
+                }
+                else //if (this.Key == "/") //divide
+                {
+                    return this._left.SolveTree() / this._right.SolveTree();
+                }
             }
-            else if (this.Key.ToString() == "-") //subtract
+            catch (Exception ex)
             {
-                return this._left.SolveTree() - this._right.SolveTree();
-            }
-            else if (this.Key.ToString() == "*") //multiply
-            {
-                return this._left.SolveTree() * this._right.SolveTree();
-            }
-            else //if (this.Key == "/") //divide
-            {
-                return this._left.SolveTree() / this._right.SolveTree();
+                MessageBox.Show("Error: please reformat before attempting to evaluate!");
+                return 0;
             }
         }
 
