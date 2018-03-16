@@ -123,8 +123,12 @@ namespace Project4
                 case "Prefix":
                     {
                         string postfix = PretoPost(expression);  //convert to postfix
-                        //if (postfix != "")
-                        //{
+                        if (postfix == "")
+                        {
+                            MessageBox.Show("Error: tree conversion unable to be completed.");
+                            return;
+                        }
+                        else { 
                             ExpressionTree<string> t = TreeConversion(postfix); //convert to exp. tree
 
                             //if (t != new ExpressionTree<string>())
@@ -153,12 +157,7 @@ namespace Project4
                             //    MessageBox.Show("Error: tree conversion unable to be completed.");
                             //    return;
                             //}
-                        //}
-                        //else
-                        //{
-                        //    MessageBox.Show("Error: Invalid prefix format.");
-                        //    return;
-                        //}
+                        }
                         break;
                     }
                 case "Postfix":
@@ -236,11 +235,11 @@ namespace Project4
                     //whitespace
                 }
             }
-            //if (s.Count() != 0)
-            //{
+            if (s.Count() != 0)
+            {
                 return s.Pop();
-            //}
-            //return new ExpressionTree<string>();
+            }
+            return new ExpressionTree<string>();
         }
 
         private string InfixtoPost(string init)
@@ -334,25 +333,25 @@ namespace Project4
                 else if (Regex.IsMatch(pieces[i].ToString(), "[+-/*]"))
                 {
                     //pop the stack twice
-                    //if (s.Count >= 2)
-                    //{
+                    if (s.Count >= 2)
+                    {
                         String val1 = s.Pop();
                         String val2 = s.Pop();
                         StringBuilder sb = new StringBuilder();
                         sb.Append(val1 + " " + val2 + " " + pieces[i] + " ");
                         s.Push(sb.ToString());
-                    //}
-                    //else
-                    //{
-                    //    return "";
-                    //}
+                    }
+                    else
+                    {
+                        return "";
+                    }
                 }
             }
-            //if (s.Count != 0)
-            //{
+           if (s.Count != 0)
+            {
                 return s.Pop();
-            //}
-            //return "";
+            }
+            return "";
         }
         private int OpPreced(char c)
         {
@@ -452,24 +451,17 @@ namespace Project4
                 case "Prefix":
                     {
                         string postfix = PretoPost(expression);
-                        //if (postfix != "")
-                        //{
+                        if (postfix == "")
+                        {
+                            MessageBox.Show("Error: Invalid prefix format.");
+                            return;
+                        }
+                        else
+                        {
                             ExpressionTree<string> tree = TreeConversion(postfix);
-                            //if (tree != new ExpressionTree<string>())
-                            //{
-                                tree.DrawTree();
-                            //}
-                            //else
-                            //{
-                            //    MessageBox.Show("Error: tree conversion unable to be completed.");
-                            //    return;
-                            //}
-                        //}
-                        //else
-                        //{
-                        //    MessageBox.Show("Error: Invalid prefix format.");
-                        //    return;
-                        //}
+
+                            tree.DrawTree();
+                        }
                         break;
                     }
                 case "Postfix":
@@ -538,15 +530,15 @@ namespace Project4
                 case "Prefix":
                     {
                         postfix = PretoPost(expression);
-                        //if (postfix != "")
-                        //{
+                        if (postfix == "")
+                        {
+                            MessageBox.Show("Error: invalid prefix format.");
+                            return;
+                        }
+                        else
+                        {
                             tree = TreeConversion(postfix);
-                        //}
-                        //else
-                        //{
-                        //    MessageBox.Show("Error: invalid prefix format.");
-                        //    return;
-                        //}
+                        }
                         break;
                     }
                 case "Postfix":

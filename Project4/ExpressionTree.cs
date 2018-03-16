@@ -106,22 +106,30 @@ namespace Project4
 
         public virtual int SolveTree()
         {
-            if (this == NIL) return 0;
-            if (this.Key.ToString() == "+") //add
+            try
             {
-                return this._left.SolveTree() + this._right.SolveTree();
+                if (this == NIL) return 0;
+                if (this.Key.ToString() == "+") //add
+                {
+                    return this._left.SolveTree() + this._right.SolveTree();
+                }
+                else if (this.Key.ToString() == "-") //subtract
+                {
+                    return this._left.SolveTree() - this._right.SolveTree();
+                }
+                else if (this.Key.ToString() == "*") //multiply
+                {
+                    return this._left.SolveTree() * this._right.SolveTree();
+                }
+                else //if (this.Key == "/") //divide
+                {
+                    return this._left.SolveTree() / this._right.SolveTree();
+                }
             }
-            else if (this.Key.ToString() == "-") //subtract
+            catch (NullReferenceException nre)
             {
-                return this._left.SolveTree() - this._right.SolveTree();
-            }
-            else if (this.Key.ToString() == "*") //multiply
-            {
-                return this._left.SolveTree() * this._right.SolveTree();
-            }
-            else //if (this.Key == "/") //divide
-            {
-                return this._left.SolveTree() / this._right.SolveTree();
+                MessageBox.Show("Error: please reformat before attempting to evaluate!");
+                return 0;
             }
         }
 
