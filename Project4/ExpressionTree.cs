@@ -49,7 +49,7 @@ namespace Project4
                 string order = tree.Key.ToString();
                 return " " + order + " " + Preorder(tree.Left) + " " + Preorder(tree.Right) + " ";
             }
-            catch (NullReferenceException nre)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error: please reformat your initial expression.");
                 return "";
@@ -64,7 +64,7 @@ namespace Project4
                 string data = tree.Key.ToString();
                 return " " + Postorder(tree.Left) + " " + Postorder(tree.Left) + " " + data + " ";
             }
-            catch (NullReferenceException nre)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error: please reformat your initial expression.");
                 return "";
@@ -79,7 +79,7 @@ namespace Project4
                 string data = tree.Key.ToString();
                 return "(" + Inorder(tree.Left) + " " + data + " " + Inorder(tree.Right) + ")";
             }
-            catch (NullReferenceException nre)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error: please reformat your initial expression.");
                 return "";
@@ -126,7 +126,7 @@ namespace Project4
                     return this._left.SolveTree() / this._right.SolveTree();
                 }
             }
-            catch (NullReferenceException nre)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error: please reformat before attempting to evaluate!");
                 return 0;
